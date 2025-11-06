@@ -6,6 +6,9 @@
 #include <iostream>
 #include <cstring>
 #include <unistd.h>
+#include <optional>
+#include <sys/types.h>
+#include <sys/stat.h>
 
 struct RecordData
 {
@@ -105,8 +108,21 @@ public:
                 "Failed to open index file '" + std::string(filePath_) + "': " + std::strerror(errno));
         }
         fd_ = fd;
-        // TODO: Read block count
-        blockCount_ = 1;
+        struct stat st{};
+        if (fstat(fd, &st) == -1)
+        {
+            perror("fstat");
+            throw std::runtime_error("Failed to get info about file");
+        }
+
+        blockCount_ = (st.st_size + blockSize_ - 1) / blockSize_;
+        if (blockCount_ == 0)
+        {
+            // Initializing first empty block
+            char buffer[blockSize_] = {0};
+            write(fd_, buffer, blockSize_);
+            blockCount_ = 1;
+        }
     }
 
     void addRecord(int key, int recordNumber)
@@ -146,6 +162,7 @@ public:
         {
             // Just insert the record if the block is empty
             Record data{key, recordNumber};
+            memcpy(blockBuffer, &data, sizeof(data));
             if (lseek(fd_, blockOffset, SEEK_SET) == -1)
             {
                 throw std::runtime_error(
@@ -166,8 +183,13 @@ public:
         while (low <= high)
         {
             size_t mid = low + (high - low) / 2;
-            if (isRecordKeyGreaterThan(blockBuffer + mid * recordSize, key))
+            int recordKey;
+            memcpy(&recordKey, blockBuffer + mid * recordSize, sizeof(int));
+
+            if (recordKey > key)
             {
+                if (mid == 0)
+                    break; // avoid underflow
                 high = mid - 1;
             }
             else
@@ -176,10 +198,14 @@ public:
             }
         }
 
-        size_t insertAt = low + 1;
-        memmove(blockBuffer + (insertAt + 1) * recordSize,
-                blockBuffer + insertAt * recordSize,
-                (lastUsedRecord - insertAt) * recordSize);
+        size_t insertAt = low;
+
+        if (insertAt <= lastUsedRecord)
+        {
+            memmove(blockBuffer + (insertAt + 1) * recordSize,
+                    blockBuffer + insertAt * recordSize,
+                    (lastUsedRecord - insertAt + 1) * recordSize);
+        }
 
         Record newRec{key, recordNumber};
         memcpy(blockBuffer + insertAt * recordSize, &newRec, recordSize);
@@ -195,6 +221,74 @@ public:
         }
     }
 
+    std::optional<int> readRecord(int key)
+    {
+        // TODO: Add different blocks options
+        off_t blockOffset = 0;
+        if (lseek(fd_, blockOffset, SEEK_SET) == -1)
+        {
+            throw std::runtime_error("Cannot move to the start of the block");
+        }
+
+        char blockBuffer[blockSize_];
+        ssize_t bytesRead = read(fd_, blockBuffer, blockSize_);
+        if (bytesRead == -1)
+        {
+            throw std::runtime_error(
+                std::string("Failed to read block 0: ") + std::strerror(errno));
+        }
+
+        // Linear scan to find the first empty space.
+        size_t slot = 0;
+        while (slot < maxRecordCount_)
+        {
+            if (isEmptyRecord(blockBuffer + slot * recordSize))
+                break;
+            ++slot;
+        }
+
+        if (slot == 0)
+        {
+            return std::nullopt;
+        }
+
+        size_t lastUsedRecord = slot - 1;
+
+        size_t low = 0;
+        size_t high = lastUsedRecord;
+
+        int recordKeyValue;
+        size_t mid;
+        while (low <= high)
+        {
+            mid = low + (high - low) / 2;
+            std::memcpy(&recordKeyValue, blockBuffer + mid * recordSize, sizeof(int));
+
+            if (recordKeyValue == key)
+            {
+                break;
+            }
+            else if (recordKeyValue > key)
+            {
+                high = mid - 1;
+            }
+            else
+            {
+                low = mid + 1;
+            }
+        }
+
+        if (recordKeyValue != key)
+        {
+            return std::nullopt;
+        }
+
+        int recordNumber;
+        std::memcpy(&recordNumber, blockBuffer + mid * recordSize + sizeof(int), sizeof(int));
+
+        return recordNumber;
+    }
+
     bool isEmptyRecord(char *start)
     {
         for (int i = 0; i < 4; i++)
@@ -205,13 +299,6 @@ public:
             }
         }
         return true;
-    }
-
-    bool isRecordKeyGreaterThan(const char *recordKey, int key)
-    {
-        int recordKeyValue;
-        std::memcpy(&recordKeyValue, recordKey, sizeof(int));
-        return recordKeyValue > key;
     }
 
     ~IndexArea()
