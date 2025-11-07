@@ -23,6 +23,8 @@ MainArea::MainArea(const char *filePath, const size_t recordSize) : filePath_(fi
         perror("fstat");
         throw std::runtime_error("Failed to get info about file");
     }
+
+    fileSize_ = st.st_size;
     recordCount_ = (st.st_size + recordSize - 1) / recordSize_;
 }
 
@@ -73,4 +75,41 @@ MainArea::~MainArea() {
     if (fd_ != -1) {
         close(fd_);
     }
+}
+
+
+const char *MainArea::readAll() const {
+    // Get file size
+    struct stat st{};
+    if (fstat(fd_, &st) == -1) {
+        throw std::runtime_error("Failed to stat file: " + std::string(std::strerror(errno)));
+    }
+    if (st.st_size == 0) {
+        return nullptr; // Empty file
+    }
+
+    // Allocate buffer (+1 for null-termination just in case)
+    auto *buffer = new char[st.st_size];
+
+    // Read from beginning
+    if (lseek(fd_, 0, SEEK_SET) == -1) {
+        delete[] buffer;
+        throw std::runtime_error("Failed to seek to beginning: " + std::string(std::strerror(errno)));
+    }
+
+    ssize_t bytesRead = read(fd_, buffer, st.st_size);
+    if (bytesRead == -1) {
+        delete[] buffer;
+        throw std::runtime_error("Failed to read file: " + std::string(std::strerror(errno)));
+    }
+
+    return buffer; // Caller must delete[] this buffer
+}
+
+size_t MainArea::fileSize() {
+    return fileSize_;
+}
+
+size_t MainArea::recordSize() {
+    return recordSize_;
 }

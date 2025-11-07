@@ -3,6 +3,7 @@
 
 #include <cstddef>
 #include <optional>
+#include <vector>
 
 
 struct Record {
@@ -18,7 +19,15 @@ public:
 
     std::optional<int> readRecord(int key);
 
-    bool isEmptyRecord(char *start);
+    static bool isEmptyRecord(const char *start);
+
+    size_t getBlockCount() const;
+
+    std::vector<char> readBlock(size_t blockNumber) const;
+
+    size_t blockSize() const;
+
+    size_t recordSize() const;
 
     ~IndexArea();
 
@@ -28,7 +37,7 @@ private:
     const size_t blockSize_ = 128;
     size_t blockCount_;
     const double fillPercentage_ = 0.9;
-    const size_t recordSize = sizeof(int) * 2; // key + recordNumber
-    const size_t maxRecordCount_ = blockSize_ / recordSize;
+    const size_t recordSize_ = sizeof(int) * 2; // key + recordNumber
+    const size_t maxRecordCount_ = blockSize_ / recordSize_;
 };
 #endif // INDEX_H

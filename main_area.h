@@ -22,13 +22,21 @@ public:
 
     size_t getRecordCount() const;
 
+    const char *readAll() const;
+
+    size_t fileSize();
+
+    size_t recordSize();
+
     ~MainArea();
 
-private:
+private
+:
     int fd_;
     const char *filePath_;
     size_t recordSize_;
     size_t recordCount_;
+    size_t fileSize_;
 };
 
 

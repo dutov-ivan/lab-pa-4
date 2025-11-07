@@ -2,7 +2,11 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QStandardItemModel>
+#include <QTableWidget>
 #include "index.h"
+#include "IndexRecordModel.h"
+#include "MainRecordModel.h"
 #include "main_area.h"
 
 QT_BEGIN_NAMESPACE
@@ -13,7 +17,7 @@ namespace Ui {
 
 QT_END_NAMESPACE
 
-class MainWindow : public QMainWindow {
+class MainWindow final : public QMainWindow {
     Q_OBJECT
 
 public:
@@ -23,9 +27,18 @@ public:
 
     void onRecordAdd();
 
+    void onIndexBlockChanged();
+
+    void syncDataToIndexView(const std::vector<char> &block);
+
+    void syncDataToMainView(const char *block);
+
 private:
     Ui::MainWindow *ui;
     IndexArea index;
     MainArea mainArea;
+    RecordModel *indexModel;
+    MainRecordModel *mainModel;
+    size_t indexBlockPage;
 };
 #endif // MAINWINDOW_H
