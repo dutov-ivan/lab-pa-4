@@ -17,6 +17,7 @@ endif ()
 # Link the executable to the UI and Core libraries
 target_link_libraries(lab4_pa_qt PRIVATE
         UI_Lib
+        Qt${QT_VERSION_MAJOR}::Widgets
 )
 
 if (QT_VERSION_MAJOR EQUAL 6)

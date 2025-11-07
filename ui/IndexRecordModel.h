@@ -5,7 +5,7 @@
 #ifndef LAB4_PA_QT_INDEXRECORDMODEL_H
 #define LAB4_PA_QT_INDEXRECORDMODEL_H
 #include <QAbstractTableModel>
-#include <core/index.h>
+#include "../core/index.h"
 
 class RecordModel : public QAbstractTableModel {
     Q_OBJECT

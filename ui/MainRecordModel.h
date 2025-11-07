@@ -7,7 +7,7 @@
 #ifndef LAB4_PA_QT_INDEXMainRecordModel_H
 #define LAB4_PA_QT_INDEXMainRecordModel_H
 #include <QAbstractTableModel>
-#include <core/main_area.h>
+#include "../core/main_area.h"
 
 class MainRecordModel : public QAbstractTableModel {
     Q_OBJECT
