@@ -6,123 +6,113 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>800</width>
-    <height>600</height>
+    <width>603</width>
+    <height>515</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QWidget" name="formLayoutWidget">
-    <property name="geometry">
-     <rect>
-      <x>140</x>
-      <y>10</y>
-      <width>160</width>
-      <height>92</height>
-     </rect>
-    </property>
-    <layout class="QFormLayout" name="formLayout">
-     <item row="0" column="0">
-      <widget class="QLabel" name="recordKeyLabel">
-       <property name="text">
-        <string>Record Key</string>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="1">
-      <widget class="QLineEdit" name="recordKeyLineEdit"/>
-     </item>
-     <item row="1" column="0">
-      <widget class="QLabel" name="nameColumnLabel">
-       <property name="text">
-        <string>Name Column</string>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="1">
-      <widget class="QLineEdit" name="nameColumnLineEdit"/>
-     </item>
-     <item row="2" column="0">
+   <layout class="QVBoxLayout" name="verticalLayout">
+    <item>
+     <widget class="QSplitter" name="splitter">
+      <property name="orientation">
+       <enum>Qt::Orientation::Horizontal</enum>
+      </property>
       <widget class="QPushButton" name="addRecordButton">
        <property name="text">
-        <string>Add record</string>
+        <string>Add</string>
        </property>
       </widget>
-     </item>
-    </layout>
-   </widget>
-   <widget class="QWidget" name="layoutWidget">
-    <property name="geometry">
-     <rect>
-      <x>140</x>
-      <y>130</y>
-      <width>520</width>
-      <height>351</height>
-     </rect>
-    </property>
-    <layout class="QGridLayout" name="gridLayout">
-     <item row="2" column="0">
-      <widget class="QTableView" name="indexView"/>
-     </item>
-     <item row="0" column="0">
-      <widget class="QLabel" name="indexLabel">
+      <widget class="QPushButton" name="editRecordButton">
        <property name="text">
-        <string>Index file</string>
+        <string>Edit</string>
        </property>
       </widget>
-     </item>
-     <item row="2" column="1">
-      <widget class="QTableView" name="mainView"/>
-     </item>
-     <item row="0" column="1">
-      <widget class="QLabel" name="mainLabel">
+      <widget class="QPushButton" name="deleteRecordButton">
        <property name="text">
-        <string>Main file</string>
+        <string>Delete</string>
        </property>
       </widget>
-     </item>
-     <item row="1" column="0">
-      <layout class="QHBoxLayout" name="horizontalLayout">
-       <item>
-        <widget class="QToolButton" name="backButton">
-         <property name="text">
-          <string>&lt;</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QLabel" name="blockLabel">
-         <property name="text">
-          <string>Block:</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QSpinBox" name="pageSpinBox"/>
-       </item>
-       <item>
-        <widget class="QToolButton" name="forwardButton">
-         <property name="text">
-          <string>&gt;</string>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </item>
-    </layout>
-   </widget>
-  </widget>
-  <widget class="QMenuBar" name="menubar">
-   <property name="geometry">
-    <rect>
-     <x>0</x>
-     <y>0</y>
-     <width>800</width>
-     <height>23</height>
-    </rect>
-   </property>
+      <widget class="QPushButton" name="generateRecordButton">
+       <property name="text">
+        <string>Generate</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="searchRecordButton">
+       <property name="text">
+        <string>Search</string>
+       </property>
+      </widget>
+     </widget>
+    </item>
+    <item>
+     <layout class="QGridLayout" name="gridLayout">
+      <item row="0" column="1">
+       <widget class="QLabel" name="mainLabel">
+        <property name="text">
+         <string>Main file</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="0">
+       <widget class="QTableView" name="indexView"/>
+      </item>
+      <item row="1" column="0">
+       <layout class="QHBoxLayout" name="indexControls">
+        <item>
+         <widget class="QToolButton" name="backButton">
+          <property name="text">
+           <string>&lt;</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="blockLabel">
+          <property name="text">
+           <string>Block:</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QSpinBox" name="pageSpinBox"/>
+        </item>
+        <item>
+         <widget class="QToolButton" name="forwardButton">
+          <property name="text">
+           <string>&gt;</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <spacer name="horizontalSpacer">
+          <property name="orientation">
+           <enum>Qt::Orientation::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>40</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+       </layout>
+      </item>
+      <item row="2" column="1">
+       <widget class="QTableView" name="mainView"/>
+      </item>
+      <item row="0" column="0">
+       <widget class="QLabel" name="indexLabel">
+        <property name="text">
+         <string>Index file</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+   </layout>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
  </widget>
