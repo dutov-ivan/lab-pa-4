@@ -4,10 +4,10 @@
 #include <QMainWindow>
 #include <QStandardItemModel>
 #include <QTableWidget>
-#include "index.h"
+#include <core/index.h>
 #include "IndexRecordModel.h"
 #include "MainRecordModel.h"
-#include "main_area.h"
+#include "core/main_area.h"
 
 QT_BEGIN_NAMESPACE
 

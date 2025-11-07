@@ -1,21 +1,23 @@
 //
 // Created by ivan on 11/7/25.
+////
+// Created by ivan on 11/7/25.
 //
 
-#ifndef LAB4_PA_QT_INDEXRECORDMODEL_H
-#define LAB4_PA_QT_INDEXRECORDMODEL_H
+#ifndef LAB4_PA_QT_INDEXMainRecordModel_H
+#define LAB4_PA_QT_INDEXMainRecordModel_H
 #include <QAbstractTableModel>
-#include "index.h"
+#include <core/main_area.h>
 
-class RecordModel : public QAbstractTableModel {
+class MainRecordModel : public QAbstractTableModel {
     Q_OBJECT
 
 public:
-    explicit RecordModel(QObject *parent = nullptr)
+    explicit MainRecordModel(QObject *parent = nullptr)
         : QAbstractTableModel(parent) {
     }
 
-    QList<Record> records;
+    QList<MainRecord> records;
 
     int rowCount(const QModelIndex &parent = QModelIndex()) const override {
         Q_UNUSED(parent);
@@ -34,7 +36,7 @@ public:
         const auto &r = records[index.row()];
         switch (index.column()) {
             case 0: return r.key;
-            case 1: return r.recordNumber;
+            case 1: return r.name;
         }
         return {};
     }
@@ -43,8 +45,8 @@ public:
         if (role != Qt::DisplayRole || orientation != Qt::Horizontal)
             return {};
         switch (section) {
-            case 0: return "Index";
-            case 1: return "Record Number";
+            case 0: return "Key";
+            case 1: return "String (up to 50 chars)";
         }
         return {};
     }
@@ -69,7 +71,7 @@ public:
     //     return true;
     // }
 
-    void addRecord(const Record &r) {
+    void addRecord(const MainRecord &r) {
         beginInsertRows(QModelIndex(), records.size(), records.size());
         records.append(r);
         endInsertRows();
@@ -77,4 +79,4 @@ public:
 };
 
 
-#endif //LAB4_PA_QT_INDEXRECORDMODEL_H
+#endif //LAB4_PA_QT_INDEXMainRecordModel_H

@@ -1,5 +1,5 @@
 #include "mainwindow.h"
-#include "./ui_mainwindow.h"
+#include "forms/ui_mainwindow.h"
 #include <QMessageBox>
 #include <QStandardItemModel>
 
@@ -12,9 +12,11 @@ MainWindow::MainWindow(QWidget *parent)
 
     // Setting up TableViews
     indexModel = new RecordModel(this);
+    ui->indexView->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
     ui->indexView->setModel(indexModel);
 
     mainModel = new MainRecordModel(this);
+    ui->mainView->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
     ui->mainView->setModel(mainModel);
 
     indexBlockPage = 0;
