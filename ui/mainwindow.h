@@ -25,13 +25,23 @@ public:
 
     ~MainWindow();
 
-    void onRecordAdd();
-
     void onIndexBlockChanged();
 
     void syncDataToIndexView(const std::vector<char> &block);
 
     void syncDataToMainView(const char *block);
+
+    void refreshData();
+
+    void onAddRecord();
+
+    void onEditRecord();
+
+    void onDeleteRecord();
+
+    void onGenerateRecords();
+
+    void onSearchRecords();
 
 private:
     Ui::MainWindow *ui;
