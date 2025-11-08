@@ -8,6 +8,8 @@
 
 #include <vector>
 
+#include "utils.h"
+
 IndexArea::IndexArea(const char *filePath) : filePath_(filePath) {
     int fd = open(filePath_, O_RDWR | O_CREAT, 0644);
     if (fd == -1) {
@@ -190,6 +192,14 @@ std::vector<char> IndexArea::readBlock(const size_t blockNumber) const {
     }
 
     return blockBuffer;
+}
+
+size_t IndexArea::editRecord(int oldKey, int newKey) {
+    throw NotImplemented();
+}
+
+size_t IndexArea::deleteRecord(int key) {
+    throw NotImplemented();
 }
 
 size_t IndexArea::blockSize() const {

@@ -22,6 +22,10 @@ public:
 
     size_t getRecordCount() const;
 
+    void deleteRecord(size_t recordNumber);
+
+    void editRecord(size_t recordNumber, const MainRecord &data);
+
     const char *readAll() const;
 
     size_t fileSize();

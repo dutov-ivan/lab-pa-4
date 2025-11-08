@@ -9,6 +9,8 @@
 #include <cstring>
 #include <sys/stat.h>
 
+#include "utils.h"
+
 MainArea::MainArea(const char *filePath, const size_t recordSize) : filePath_(filePath) {
     recordSize_ = recordSize;
 
@@ -69,6 +71,14 @@ void MainArea::writeRecord(const MainRecord &data) {
 
 size_t MainArea::getRecordCount() const {
     return recordCount_;
+}
+
+void MainArea::deleteRecord(size_t recordNumber) {
+    throw NotImplemented();
+}
+
+void MainArea::editRecord(size_t recordNumber, const MainRecord &data) {
+    throw NotImplemented();
 }
 
 MainArea::~MainArea() {

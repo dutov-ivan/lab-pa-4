@@ -2,6 +2,7 @@
 add_library(Core_Lib STATIC
         index.cpp
         main_area.cpp
+        utils.h
 )
 
 # Define the Public Interface (Headers that UI/App will include)

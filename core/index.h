@@ -25,6 +25,10 @@ public:
 
     std::vector<char> readBlock(size_t blockNumber) const;
 
+    size_t editRecord(int oldKey, int newKey); // returns record number
+
+    size_t deleteRecord(int key); // returns record number
+
     size_t blockSize() const;
 
     size_t recordSize() const;
